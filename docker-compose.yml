@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - APP_DB_USER=${DB_USER}
+      - APP_DB_PASS=${DB_PASSWORD}
+      - APP_DB_NAME=${DB_NAME}
+    ports:
+      - 5432:5432
+  app:
+    depends_on:
+      - postgres
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+    ports:
+      - 8080:8080
